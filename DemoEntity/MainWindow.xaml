@@ -1,0 +1,64 @@
+﻿<Window x:Class="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DemoEntity"
+        mc:Ignorable="d"
+        Title="Demo EntityFramework" Height="350" Width="525" Loaded="Window_Loaded" Language="es-ES" Icon="database_link.ico">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF8EA2E8" Offset="0"/>
+            <GradientStop Color="#FFEDEEE7" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Window.Resources>
+        <local:Articulo x:Key="nuevo"></local:Articulo>
+    </Window.Resources>
+
+    <TabControl Margin="20">
+        <TabItem Header="Listado de artículos">
+            <ListBox x:Name="ArticulosListBox" ItemsSource="{Binding}" DisplayMemberPath="nombre" Margin="10"/>
+        </TabItem>
+        <TabItem Header="Nuevo artículo">
+            <Grid x:Name="InsertarGrid" Margin="5,5,5,0" DataContext="{StaticResource nuevo}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Nombre:</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Precio:</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Tipo:</TextBlock>
+                <TextBox x:Name="NombreTextBox" Text="{Binding nombre}" Grid.Row="0" Grid.Column="1" Height="20"/>
+                <TextBox x:Name="PrecioTextBox"  Text="{Binding precio}" Grid.Row="1" Grid.Column="1" Height="20"/>
+                <ComboBox x:Name="TipoComboBox"  ItemsSource="{Binding}" DisplayMemberPath="tipo" SelectedValuePath="id_tipo" Grid.Row="2" Grid.Column="1" Height="20" SelectedValue="{Binding Source={StaticResource nuevo}, Path=id_tipo}"/>
+                <Button x:Name="InsertarButton" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="80"  Click="InsertarButton_Click" Margin="0,15,0,0">
+                    Insertar
+                </Button>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Gestión de artículos">
+            <StackPanel>
+                <TextBlock Margin="5,5,0,5">Buscar por nombre:</TextBlock>
+                <TextBox x:Name="FiltroTextBox" Margin="5,0,5,10" TextChanged="FiltroTextBox_TextChanged"/>
+                <DataGrid x:Name="TablaDataGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" Margin="5,0,5,10" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding nombre}" Header="Nombre" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding precio, StringFormat=C}" Header="Precio" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding TipoArticulo.tipo}" Header="Tipo" Width="*" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button x:Name="EliminarButton" Width="80" Margin="5,0,0,0" HorizontalAlignment="Left" Click="EliminarButton_Click">
+                    Eliminar
+                </Button>
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</Window>
